@@ -1,6 +1,7 @@
 package com.example.apijwt.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 public class UserEntity  implements UserDetails {
 
+    @Getter
     @Id //Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)  //Autoincrement
     private Long id;
@@ -20,6 +22,7 @@ public class UserEntity  implements UserDetails {
 
     private String password;
 
+    @Getter
     @Column(unique = true)
     private String email;
 
@@ -27,6 +30,17 @@ public class UserEntity  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<UserAuthority> authorities = new ArrayList<>();
 
+
+    public UserEntity() {
+    }
+
+    public UserEntity(Long id, String username, String password, String email, List<UserAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.authorities = authorities;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,12 +51,12 @@ public class UserEntity  implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override
@@ -62,6 +76,7 @@ public class UserEntity  implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
 }
