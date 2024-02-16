@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,20 +24,39 @@ public class SecurityConfig {
     private JwtFilter jwtFilter;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomAuthenticationProvider customAuthProvider;
+    /*
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http,
+                                             PasswordEncoder passwordEncoder,
+                                             UserDetailsService userDetailsService) throws Exception {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder)
+                .and().build();
     }
+    */
+    /*
+    @Bean
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
 
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return new ProviderManager(authenticationProvider);
+    }
+    */
 
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationManagerBuilder auth) throws Exception {
-        return auth.getObject();
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        return new ProviderManager(customAuthProvider);
+
     }
 
     @Bean
@@ -43,7 +64,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -54,6 +76,5 @@ public class SecurityConfig {
         return http.build();
 
     }
-
 
 }
