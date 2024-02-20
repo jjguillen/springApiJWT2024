@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,10 +23,7 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
-    @Autowired
-    private CustomAuthenticationProvider customAuthProvider;
-
-    /*
+    //ESTA OPCIÓN ES USANDO UN DAOAUTHENTICATIONPROVIDER
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService,
@@ -37,19 +35,23 @@ public class SecurityConfig {
 
         return new ProviderManager(authenticationProvider);
     }
-    */
+
+    /*
+    //ESTA ES OTRA FORMA DE HACERLO CON UN CUSTOMAUTENTICATIONPROVIDER
+    //HE DEJADO LA CLASE POR SI LO QUERÉIS HACER ASÍ, HABRÍA QUE COMENTAR LO DE ARRIBA
+    @Autowired
+    private CustomAuthenticationProvider customAuthProvider;
 
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
         return new ProviderManager(customAuthProvider);
-
     }
+    */
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/auth/register").permitAll()

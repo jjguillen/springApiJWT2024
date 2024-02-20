@@ -25,14 +25,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         //Comprobar la password
         UserEntity user = (UserEntity) userService.loadUserByUsername(authentication.getName());
 
-        System.out.println(user.getPassword());
-        System.out.println(passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword()));
-
+        //Comprobamos que la contraseña en Json si le aplicamos el encoder coincide (matches) con la
+        //contraseña encriptada almacenada en BBDD
         if (passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
-            UsernamePasswordAuthenticationToken authenticationToken;
-            authenticationToken = new UsernamePasswordAuthenticationToken(user,
+            return new UsernamePasswordAuthenticationToken(user,
                     authentication.getCredentials(), authentication.getAuthorities());
-            return authenticationToken;
         } else {
             throw new AuthenticationException("Invalid credentials") {};
         }

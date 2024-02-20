@@ -2,9 +2,7 @@ package com.example.apijwt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.apijwt.service.PlantacionService;
 import com.example.apijwt.entity.Plantacion;
 
@@ -24,5 +22,11 @@ public class PlantacionController {
             return ResponseEntity.notFound().build();  //Devuelve 404 si no hay nada
 
         return ResponseEntity.ok( plantaciones );
+    }
+
+    @PostMapping("/plantaciones")
+    public ResponseEntity<Plantacion> create(@RequestBody Plantacion plantacion) {
+        this.plantacionService.save(plantacion);
+        return ResponseEntity.ok(plantacion);
     }
 }

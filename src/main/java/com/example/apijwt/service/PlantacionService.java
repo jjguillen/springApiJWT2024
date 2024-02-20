@@ -20,4 +20,9 @@ public class PlantacionService {
     public List<Plantacion> findAll() {
         return this.repository.findAll();
     }
+
+    public Plantacion save(Plantacion plantacion) {
+        return this.repository.save(plantacion);
+    };
+
 }
