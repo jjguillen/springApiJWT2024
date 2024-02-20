@@ -41,7 +41,12 @@ public class AuthController {
     public LoginResponse login(@RequestBody LoginRequest loginDTO){
 
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());
+
+        //Este método es el que llama al AuthenticationManager correspondiente para ver si la autenticación
+        //es correcta
         Authentication authentication = this.authManager.authenticate(authDTO);
+
+        //El método nos devuelve un UserEntity (con UserDetailService) para con esos datos generar el token
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         String token = this.jwtTokenProvider.generateToken(authentication);

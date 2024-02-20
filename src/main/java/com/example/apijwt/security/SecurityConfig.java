@@ -25,13 +25,18 @@ public class SecurityConfig {
 
     @Autowired
     private CustomAuthenticationProvider customAuthProvider;
+    /*
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http,
+                                             PasswordEncoder passwordEncoder,
+                                             UserDetailsService userDetailsService) throws Exception {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder)
+                .and().build();
+    }
+    */
     /*
     @Bean
     public AuthenticationManager authenticationManager(
@@ -46,7 +51,6 @@ public class SecurityConfig {
     }
     */
 
-
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService,
@@ -54,7 +58,6 @@ public class SecurityConfig {
         return new ProviderManager(customAuthProvider);
 
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

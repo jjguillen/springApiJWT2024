@@ -46,9 +46,7 @@ public class JwtTokenProvider {
             return false;
 
         try {
-            JwtParser validator = Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                    .build();
+            JwtParser validator = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build();
 
             validator.parseClaimsJws(token);
             return true;
@@ -64,9 +62,7 @@ public class JwtTokenProvider {
     }
 
     public String getUsernameFromToken(String token) {
-        JwtParser parser = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                .build();
+        JwtParser parser = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build();
 
         Claims claims = parser.parseClaimsJws(token).getBody();
         return claims.get("username").toString();
