@@ -65,7 +65,8 @@ public class JwtTokenProvider {
     public String getUsernameFromToken(String token) {
         JwtParser parser = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build();
 
-        Claims claims = parser.parseSignedClaims(token).getBody();
-        return claims.get("username").toString();
+        Jws<Claims> claims = parser.parseSignedClaims(token);
+
+        return claims.getPayload().get("username").toString();
     }
 }
