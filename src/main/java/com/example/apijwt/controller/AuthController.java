@@ -42,8 +42,7 @@ public class AuthController {
 
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());
 
-        //Este método es el que llama al AuthenticationManager correspondiente para ver si la autenticación
-        //es correcta
+        //Este método es el que llama al AuthenticationManager correspondiente para ver si la autenticación es correcta
         Authentication authentication = this.authManager.authenticate(authDTO);
 
         //El método nos devuelve un UserEntity (con UserDetailService) para con esos datos generar el token
