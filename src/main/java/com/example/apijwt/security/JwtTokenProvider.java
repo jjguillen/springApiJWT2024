@@ -30,11 +30,12 @@ public class JwtTokenProvider {
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         return Jwts.builder()
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
-                .setHeaderParam("typ", "JWT")
-                .setSubject(Long.toString(user.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), Jwts.SIG.HS256)
+                .header()
+                    .add("typ", "JWT").and()
+                .subject(Long.toString(user.getId()))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
                 .claim("username", user.getUsername())
                 .claim("email", user.getEmail())
                 .compact();
@@ -48,7 +49,7 @@ public class JwtTokenProvider {
         try {
             JwtParser validator = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build();
 
-            validator.parseClaimsJws(token);
+            validator.parseSignedClaims(token);
             return true;
         } catch (SignatureException e) {
             log.info("Error en la firma del token", e);
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
     public String getUsernameFromToken(String token) {
         JwtParser parser = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())).build();
 
-        Claims claims = parser.parseClaimsJws(token).getBody();
+        Claims claims = parser.parseSignedClaims(token).getBody();
         return claims.get("username").toString();
     }
 }
