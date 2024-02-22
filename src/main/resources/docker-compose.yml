@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+  web:
+    container_name: springapijwt
+    image: jjgb77/springapijwt:1-arm64
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    container_name: springmysql
+    image: mysql:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: toor
+        MYSQL_DATABASE: spring_jwt
+    ports:
+        - "3308:3306"
+    volumes:
+        - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 10s
+      retries: 5
+      
