@@ -7,9 +7,10 @@ import com.example.apijwt.service.PlantacionService;
 import com.example.apijwt.entity.Plantacion;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:9000")
+//@CrossOrigin(origins = "http://localhost:9000")
 public class PlantacionController {
 
     @Autowired
@@ -24,9 +25,27 @@ public class PlantacionController {
         return ResponseEntity.ok( plantaciones );
     }
 
+    @GetMapping("/plantaciones/{plantacionId}")
+    public ResponseEntity<Plantacion> findBydId(@PathVariable Long plantacionId) {
+        Optional<Plantacion> plantacion = this.plantacionService.findById(plantacionId);
+        if (!plantacion.isPresent())
+            return ResponseEntity.notFound().build();  //Devuelve 404 si no hay nada
+
+        return ResponseEntity.ok( plantacion.get() );
+    }
+
     @PostMapping("/plantaciones")
     public ResponseEntity<Plantacion> create(@RequestBody Plantacion plantacion) {
         this.plantacionService.save(plantacion);
         return ResponseEntity.ok(plantacion);
+    }
+
+    @DeleteMapping("/plantaciones/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        return this.plantacionService.findById(id)
+                .map( m -> {
+                    this.plantacionService.deleteById(id);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
