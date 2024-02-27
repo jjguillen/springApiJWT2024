@@ -29,9 +29,12 @@ public class Sensor {
 
     private LocalDate fechaInstalacion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_plantacion", foreignKey = @ForeignKey(name = "fk_plantacion"))
     @JsonIgnore
     private Plantacion plantacion;
+
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.REMOVE,  orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Registro> registros = new ArrayList<>();
 
 }

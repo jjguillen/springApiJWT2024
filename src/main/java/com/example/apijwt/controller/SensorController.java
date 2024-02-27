@@ -59,4 +59,10 @@ public class SensorController {
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/sensores")
+    public ResponseEntity<Sensor> update(@RequestBody Sensor sensor) {
+        this.sensorService.save(sensor, -1l);
+        return ResponseEntity.ok(sensor);
+    }
 }

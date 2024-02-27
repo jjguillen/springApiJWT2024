@@ -48,4 +48,10 @@ public class PlantacionController {
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/plantaciones")
+    public ResponseEntity<Plantacion> update(@RequestBody Plantacion plantacion) {
+        this.plantacionService.save(plantacion);
+        return ResponseEntity.ok(plantacion);
+    }
 }
