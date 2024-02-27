@@ -62,6 +62,8 @@ public class SensorController {
 
     @PutMapping("/sensores")
     public ResponseEntity<Sensor> update(@RequestBody Sensor sensor) {
+        //Me falta pasarle el id de la plantación, pero no lo tiene el sensor ???
+        //Me voy a la Base de datos a sacar el sensor entero con todo, no el de RequestBody
         this.sensorService.save(sensor, -1l);
         return ResponseEntity.ok(sensor);
     }

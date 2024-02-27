@@ -60,6 +60,7 @@ public class RegistroController {
 
     @PutMapping("/registros")
     public ResponseEntity<Registro> update(@RequestBody Registro registro) {
+        //Me falta pasarle el id del sensor, pero no lo tiene el registro ???
         this.registroService.save(registro, -1l);
         return ResponseEntity.ok(registro);
     }
