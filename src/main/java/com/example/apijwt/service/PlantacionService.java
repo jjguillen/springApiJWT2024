@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PlantacionService {
@@ -21,8 +23,14 @@ public class PlantacionService {
         return this.repository.findAll();
     }
 
+    public Optional<Plantacion> findById(Long id) {
+        return this.repository.findById(id);
+    }
+
     public Plantacion save(Plantacion plantacion) {
         return this.repository.save(plantacion);
     };
+
+    public void deleteById(Long id) { this.repository.deleteById(id);  }
 
 }

@@ -1,13 +1,13 @@
 package com.example.apijwt.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +26,8 @@ public class Plantacion {
 
     private Double longitud;
 
+    @OneToMany(mappedBy = "plantacion", cascade = CascadeType.REMOVE,  orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Sensor> sensores = new ArrayList<>();
 
 
 }
